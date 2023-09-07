@@ -1,72 +1,47 @@
-`define DRIV_IF vif.DRIVER.driver_cb
-
-
-class fifo_driver extends uvm_driver#(fifo_seq_item);
-  
+class fifo_driver extends uvm_driver#(f_seq_item);
+  virtual fifo_if vif;
+  f_seq_item tr;
   `uvm_component_utils(fifo_driver)
   
-  virtual fifo_interface vif;
-  
-  //---------------------------------------
-  //Constructor
-  //---------------------------------------
-  function new(string name, uvm_component parent);
-    super.new(name,parent);
+  function new(string name = "fifo_driver", uvm_component parent);
+    super.new(name, parent);
   endfunction
   
-  //---------------------------------------
-  //Build Phase
-  //---------------------------------------
-  function void build_phase(uvm_phase phase);
+  virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if(!uvm_config_db#(virtual fifo_interface)::get(this, "", "vif", vif)) 
-      begin
-        `uvm_fatal("NO_VIF",{"virtual interface must be set for: ",get_full_name(),".vif"});
-      end
+    if(!uvm_config_db#(virtual fifo_if)::get(this, "", "vif", vif))
+      `uvm_fatal("Driver: ", "No vif is found!")
   endfunction
-  
-  //---------------------------------------
-  //Run Phase
-  //---------------------------------------
+
   virtual task run_phase(uvm_phase phase);
+    vif.d_mp.d_cb.wr <= 'b0;
+    vif.d_mp.d_cb.rd <= 'b0;
+    vif.d_mp.d_cb.data_in <= 'b0;
     forever begin
-      fifo_seq_item trans;
-      seq_item_port.get_next_item(trans);
-      uvm_report_info("FIFO_DRIVER ", $psprintf("Got Transaction %s",trans.convert2string()));
-      
-      @(`DRIV_IF);
-      //---------------------------------------
-      //Driver's writing logic
-      //---------------------------------------
-      if(trans.wr) begin
-        `DRIV_IF.wr<=trans.wr;
-        `DRIV_IF.rd<=trans.rd;
-        `DRIV_IF.data_in<=trans.data_in;
-        @(`DRIV_IF);begin
-        `DRIV_IF.wr<=0;
-        trans.full=`DRIV_IF.full;
-        end
-      end
-      //---------------------------------------
-      //Driver's reading logic
-      //---------------------------------------
-      if(trans.rd) begin
-        `DRIV_IF.wr<=trans.wr;
-        `DRIV_IF.rd<=trans.rd;
-        @(`DRIV_IF);
-        `DRIV_IF.rd<=0;
-        @(`DRIV_IF); 
-        begin
-          trans.data_out=`DRIV_IF.data_out;
-          trans.empty=`DRIV_IF.empty;
-        end
-      end
-     
-        uvm_report_info("FIFO_DRIVER ", $psprintf("Got Response %s",trans.convert2string()));
-      //Putting back response
-      seq_item_port.put(trans);
+      seq_item_port.get_next_item(req);
+      if(req.wr == 1)
+        main_write(req.data_in);
+      else if(req.rd == 1)
+        main_read();
       seq_item_port.item_done();
     end
   endtask
   
+  virtual task main_write(input [7:0] din);
+    @(posedge vif.d_mp.clk)
+    vif.d_mp.d_cb.wr <= 'b1;
+    vif.d_mp.d_cb.data_in <= din;
+    @(posedge vif.d_mp.clk)
+    vif.d_mp.d_cb.wr <= 'b0;
+  endtask
+  
+  virtual task main_read();
+    @(posedge vif.d_mp.clk)
+    vif.d_mp.d_cb.rd <= 'b1;
+    @(posedge vif.d_mp.clk)
+    vif.d_mp.d_cb.rd <= 'b0;
+  endtask
+
 endclass
+  
+   
