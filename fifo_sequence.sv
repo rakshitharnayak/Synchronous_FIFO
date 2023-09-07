@@ -102,4 +102,4 @@ class fifo_sequence3 extends uvm_sequence #(fifo_seq_item);
             finish_item(tr); 
         end
 	endtask
-endclass: fifo_sequence2
+endclass: fifo_sequence3
