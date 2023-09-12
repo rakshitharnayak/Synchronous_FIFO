@@ -1,7 +1,7 @@
 class fifo_scoreboard extends uvm_scoreboard;
   uvm_analysis_imp#(fifo_seq_item, fifo_scoreboard) item_got_export;
   `uvm_component_utils(fifo_scoreboard)
-  int count;
+ static int count;
   
   function new(string name = "fifo_scoreboard", uvm_component parent);
     super.new(name, parent);
@@ -15,13 +15,13 @@ class fifo_scoreboard extends uvm_scoreboard;
   int queue[$];
   
   function void write(input fifo_seq_item tr);
-    bit [7:0] examdata;
+    bit [DATA_W - 1:0] examdata;
     if(tr.i_wren == 'b1)begin
       queue.push_back(tr.i_wrdata);
       count++;
       `uvm_info("write Data", $sformatf("wr: %0b, rd: %0b, data_in: %0h, almost_full = %0b, full: %0b, ",tr.i_wren, tr.i_rden, tr.i_wrdata, tr.o_alm_full, tr.o_full), UVM_LOW);
     end
-    else if (tr.i_rden == 'b1)begin
+     if (tr.i_rden == 'b1)begin
       if(queue.size() >= 'd1)begin
         examdata = queue.pop_front();
         count--;
@@ -35,6 +35,9 @@ class fifo_scoreboard extends uvm_scoreboard;
         end
       end
     end
+
+    if(count >= (DEPTH -UPP_TH-1) && count <DEPTH)
+      
   endfunction
 endclass
         
