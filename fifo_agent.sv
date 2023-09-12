@@ -34,7 +34,7 @@ class fifo_agent extends uvm_agent;
     end
     mon=fifo_monitor::type_id::create("mon",this);
     
-    if(!uvm_config_db#(virtual fifo_interface)::get(this,"","vif",vif))
+    if(!uvm_config_db#(virtual fifo_if)::get(this,"","vif",vif))
       begin
         `uvm_error("build_phase","agent virtual interface failed");
       end
