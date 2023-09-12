@@ -1,6 +1,6 @@
 class fifo_driver extends uvm_driver#(f_seq_item);
   virtual fifo_if vif;
-  f_seq_item tr;
+  fifo_seq_item tr;
   `uvm_component_utils(fifo_driver)
   
   function new(string name = "fifo_driver", uvm_component parent);
