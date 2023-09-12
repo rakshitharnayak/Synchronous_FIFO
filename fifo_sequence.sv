@@ -6,8 +6,6 @@ class fifo_sequence extends uvm_sequence#(fifo_seq_item);
       super.new(name);
     endfunction
 
-// FIFO test 1
-// write FIFO from empty to full 
     task body();
       
 	 `uvm_info(get_type_name(), $sformatf("******** Generate 1024 WRITE REQs ********"), UVM_LOW)
