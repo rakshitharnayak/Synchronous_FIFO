@@ -1,4 +1,5 @@
 import uvm_pkg::*;
+import fifo_pkg::*;
 `include "uvm_macros.svh"
 `include "fifo_if.sv"
 `include "fifo_test.sv"
