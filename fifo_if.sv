@@ -14,6 +14,9 @@ interface fifo_if(input bit clk, rstn);
     clocking m_cb @(posedge clk);
     default input #0 output #0;  
     input  o_alm_empty, o_empty, o_alm_full, o_full, o_rddata;    
+    input i_wren;
+    input i_rden;
+    input i_wrdata;
   endclocking
 
   modport d_mp (clocking d_cb);
