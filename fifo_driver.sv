@@ -14,19 +14,21 @@ class fifo_driver extends uvm_driver#(f_seq_item);
   endfunction
 
   virtual task run_phase(uvm_phase phase);
-    if(vif.d_mp.d_cb.rstn==0)
+    if(vif.d_mp.d_cb.rstn==0) begin
        @(posedge vif.d_mp)
-          begin
-    vif.d_mp.d_cb.i_wren <= 'b0;
-    vif.d_mp.d_cb.i_rden <= 'b0;
-    vif.d_mp.d_cb.i_wrdata <= 'b0;
-    forever begin
-      seq_item_port.get_next_item(tr);
-      if(tr.i_wren == 1)
-        main_write(tr.i_wrdata);
-      else if(tr.i_rden == 1)
-        main_read();
-      seq_item_port.item_done();
+      vif.d_mp.d_cb.i_wren <= 'b0;
+      vif.d_mp.d_cb.i_rden <= 'b0;
+      vif.d_mp.d_cb.i_wrdata <= 'b0;
+    end
+    else begin
+      forever begin
+        seq_item_port.get_next_item(tr);
+        if(tr.i_wren == 1)
+          main_write(tr.i_wrdata);
+        else if(tr.i_rden == 1)
+          main_read();
+        seq_item_port.item_done();
+      end
     end
   endtask
   
