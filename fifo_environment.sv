@@ -14,6 +14,7 @@ class fifo_environment extends uvm_env;
   endfunction
   
   virtual function void connect_phase(uvm_phase phase);
+    //monitor to scoreboard connection
     agt.mon.item_got_port.connect(scb.item_got_export);
   endfunction
   
