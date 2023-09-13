@@ -1,7 +1,8 @@
+ //SCOREBOARD
 class fifo_scoreboard extends uvm_scoreboard;
   uvm_analysis_imp#(fifo_seq_item, fifo_scoreboard) item_got_export;
   `uvm_component_utils(fifo_scoreboard)
- static int count;
+  static int count;
   
   function new(string name = "fifo_scoreboard", uvm_component parent);
     super.new(name, parent);
@@ -15,7 +16,7 @@ class fifo_scoreboard extends uvm_scoreboard;
   int queue[$];
   
   function void write(input fifo_seq_item tr);
-    bit [DATA_W - 1:0] examdata;
+    bit [`DATA_W - 1:0] examdata;
     if(tr.i_wren == 'b1)begin
       queue.push_back(tr.i_wrdata);
       count++;
@@ -36,8 +37,7 @@ class fifo_scoreboard extends uvm_scoreboard;
       end
     end
 
-    if(count >= (DEPTH -UPP_TH-1) && count <DEPTH)
+//     if(count >= (DEPTH -UPP_TH-1) && count <DEPTH)
       
   endfunction
 endclass
-        
