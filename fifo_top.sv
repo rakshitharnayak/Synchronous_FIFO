@@ -3,7 +3,6 @@
 `include "uvm_macros.svh"
 `include "defines.sv"
 `include "fifo_if.sv"
-// `include "fifo_test.sv"
 `include "fifo_seq_item.sv"
 `include "fifo_sequence.sv"
 `include "fifo_sequencer.sv"
