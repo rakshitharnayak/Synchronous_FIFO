@@ -1,4 +1,5 @@
-class fifo_monitor extends uvm_monitor;
+//MONITOR
+ class fifo_monitor extends uvm_monitor;
   virtual fifo_if vif;
   fifo_seq_item tr;
   uvm_analysis_port#(fifo_seq_item) item_got_port;
@@ -12,7 +13,7 @@ class fifo_monitor extends uvm_monitor;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    tr = fifo_sequence_item::type_id::create("tr");
+    tr = fifo_seq_item::type_id::create("tr");
     if(!uvm_config_db#(virtual fifo_if)::get(this, "", "vif", vif))
       `uvm_fatal("Monitor: ", "No vif is found!")
   endfunction
@@ -70,4 +71,4 @@ class fifo_monitor extends uvm_monitor;
     end
   endtask
 endclass
-
+    
