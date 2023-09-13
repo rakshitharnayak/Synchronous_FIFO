@@ -1,3 +1,4 @@
+//AGENT
 class fifo_agent extends uvm_agent;
 
   //Agent will have the sequencer, driver and monitor components for the APB interface
