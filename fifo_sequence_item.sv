@@ -1,16 +1,20 @@
+///SEQUENCE_ITEM
+// `include "defines.sv"
+// parameter DATA_W = 128, DEPTH = 1024, UPP_TH = 4, LOW_TH = 2;
+
 class fifo_seq_item extends uvm_sequence_item;
-  
+//  parameter DATA_W = 128, DEPTH = 1024, UPP_TH = 4, LOW_TH = 2; 
   //---------------------------------------
   //data and control fields
   //---------------------------------------
-  rand bit [DATA_W - 1:0]i_wrdata;
+  rand bit [`DATA_W - 1:0]i_wrdata;
   rand bit i_wren;
   rand bit i_rden;
   bit o_full;
   bit o_empty;
   bit o_alm_full;
   bit o_alm_empty;
-  bit [DATA_W - 1:0]o_rddata;
+  bit [`DATA_W - 1:0]o_rddata;
   
   //---------------------------------------
   //Utility and Field macros
