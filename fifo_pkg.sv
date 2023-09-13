@@ -1,7 +1,7 @@
 //This package includes all the files in the testbench architecture 
 //which will be imported in the top module
 package fifo_pkg;
-  `include "fifo_sequence_item.sv"
+  `include "fifo_seq_item.sv"
   `include "fifo_sequence.sv"
   `include "fifo_sequencer.sv"
   `include "fifo_driver.sv"
