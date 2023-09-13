@@ -1,9 +1,5 @@
-///SEQUENCE_ITEM
-// `include "defines.sv"
-// parameter DATA_W = 128, DEPTH = 1024, UPP_TH = 4, LOW_TH = 2;
-
 class fifo_seq_item extends uvm_sequence_item;
-//  parameter DATA_W = 128, DEPTH = 1024, UPP_TH = 4, LOW_TH = 2; 
+
   //---------------------------------------
   //data and control fields
   //---------------------------------------
