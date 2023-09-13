@@ -1,4 +1,5 @@
-class fifo_driver extends uvm_driver#(f_seq_item);
+//DRIVER
+class fifo_driver extends uvm_driver#(fifo_seq_item);
   virtual fifo_if vif;
   fifo_seq_item tr;
   `uvm_component_utils(fifo_driver)
@@ -32,21 +33,19 @@ class fifo_driver extends uvm_driver#(f_seq_item);
     end
   endtask
   
-  virtual task main_write(input [DATA_W - 1:0] din);
+    virtual task main_write(input [`DATA_W - 1:0] din);
     @(posedge vif.d_mp)
     vif.d_mp.d_cb.i_wren <= 'b1;
-    vif.d_mp.d_cb.i_wrdta <= din;
+    vif.d_mp.d_cb.i_wrdata <= din;
      @(posedge vif.d_mp)
      vif.d_mp.d_cb.i_wren <= 'b0;
   endtask
   
   virtual task main_read();
     @(posedge vif.d_mp)
-    vif.d_mp.d_cb.rd <= 'b1;
+    vif.d_mp.d_cb.i_rden <= 'b1;
     @(posedge vif.d_mp)
-    vif.d_mp.d_cb.rd <= 'b0;
+    vif.d_mp.d_cb.i_rden <= 'b0;
   endtask
 
 endclass
-  
-   
