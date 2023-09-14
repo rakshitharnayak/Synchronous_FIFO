@@ -1,4 +1,5 @@
- //TOP
+
+    //TOP
    import uvm_pkg::*;
 `include "uvm_macros.svh"
 `include "defines.sv"
@@ -44,6 +45,10 @@ module tb;
     $dumpfile("dump.vcd"); 
     $dumpvars;
     run_test("fifo_test");
+  end
+  
+  initial begin
+  #25000000  $finish;
   end
   
 endmodule
