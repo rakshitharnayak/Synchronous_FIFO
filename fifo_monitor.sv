@@ -20,21 +20,9 @@
       
   virtual task run_phase(uvm_phase phase);
     forever begin
-      @(posedge vif.m_mp)
-      if(vif.m_mp.m_cb.i_wren == 1 && vif.m_mp.m_cb.i_rden == 1)begin
-        $display("\n write enable and read enable are high");
-        tr.i_wrdata = vif.m_mp.m_cb.i_wrdata;
-        tr.i_wren = 'b1;
-        tr.i_rden = 'b1;
-        tr.o_full = vif.m_mp.m_cb.o_full;
-        tr.o_alm_full = vif.m_mp.m_cb.o_alm_full;
-        tr.o_empty = vif.m_mp.m_cb.o_empty;
-        tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
-        item_got_port.write(tr);
-      end
-      else if(vif.m_mp.m_cb.i_wren == 1 && vif.m_mp.m_cb.i_rden == 0)begin
-        @(posedge vif.m_mp)
-        $display("\ni_rden -> read enable is high");
+      @(posedge vif.m_mp.m_cb)
+      if(vif.m_mp.m_cb.i_wren == 1 )begin
+//         $display("\n write enable is high and read enable is low");
         tr.o_rddata = vif.m_mp.m_cb.o_rddata;
         tr.i_wren = 'b1;
         tr.i_rden = 'b0;
@@ -44,9 +32,9 @@
         tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
         item_got_port.write(tr);
       end
-      else if(vif.m_mp.m_cb.i_wren == 0 && vif.m_mp.m_cb.i_rden == 1)begin
-        @(posedge vif.m_mp)
-        $display("\ni_rden -> read enable is high");
+      else if( vif.m_mp.m_cb.i_rden == 1)begin
+        @(posedge vif.m_mp.m_cb)
+//         $display("\n write enable is low and read enable is high");
         tr.o_rddata = vif.m_mp.m_cb.o_rddata;
         tr.i_wren = 'b0;
         tr.i_rden = 'b1;
@@ -56,19 +44,56 @@
         tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
         item_got_port.write(tr);
       end
-      else if(vif.m_mp.m_cb.i_wren == 0 && vif.m_mp.m_cb.i_rden == 0)begin
-        @(posedge vif.m_mp)
-        $display("\ni_rden -> read enable is high");
-        tr.o_rddata = vif.m_mp.m_cb.o_rddata;
-        tr.i_wren = 'b0;
-        tr.i_rden = 'b0;
-        tr.o_full = vif.m_mp.m_cb.o_full;
-        tr.o_alm_full = vif.m_mp.m_cb.o_alm_full;
-        tr.o_empty = vif.m_mp.m_cb.o_empty;
-        tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
-        item_got_port.write(tr);
-    end
-    end
+       end
   endtask
 endclass
+      
+//       if(vif.m_mp.m_cb.i_wren == 1 && vif.m_mp.m_cb.i_rden == 1)begin
+//         $display("\n write enable and read enable are high");
+//         tr.i_wrdata = vif.m_mp.m_cb.i_wrdata;
+//         tr.i_wren = 'b1;
+//         tr.i_rden = 'b1;
+//         tr.o_full = vif.m_mp.m_cb.o_full;
+//         tr.o_alm_full = vif.m_mp.m_cb.o_alm_full;
+//         tr.o_empty = vif.m_mp.m_cb.o_empty;
+//         tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
+//         item_got_port.write(tr);
+//       end
+//        if(vif.m_mp.m_cb.i_wren == 1 && vif.m_mp.m_cb.i_rden == 0)begin
+//         @(posedge vif.m_mp.m_cb)
+//         $display("\n write enable is high and read enable is low");
+//         tr.o_rddata = vif.m_mp.m_cb.o_rddata;
+//         tr.i_wren = 'b1;
+//         tr.i_rden = 'b0;
+//         tr.o_full = vif.m_mp.m_cb.o_full;
+//         tr.o_alm_full = vif.m_mp.m_cb.o_alm_full;
+//         tr.o_empty = vif.m_mp.m_cb.o_empty;
+//         tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
+//         item_got_port.write(tr);
+//       end
+//       if(vif.m_mp.m_cb.i_wren == 0 && vif.m_mp.m_cb.i_rden == 1)begin
+//         @(posedge vif.m_mp.m_cb)
+//         $display("\n write enable is low and read enable is high");
+//         tr.o_rddata = vif.m_mp.m_cb.o_rddata;
+//         tr.i_wren = 'b0;
+//         tr.i_rden = 'b1;
+//         tr.o_full = vif.m_mp.m_cb.o_full;
+//         tr.o_alm_full = vif.m_mp.m_cb.o_alm_full;
+//         tr.o_empty = vif.m_mp.m_cb.o_empty;
+//         tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
+//         item_got_port.write(tr);
+//       end
+//       if(vif.m_mp.m_cb.i_wren == 0 && vif.m_mp.m_cb.i_rden == 0)begin
+//         @(posedge vif.m_mp.m_cb)
+//         $display("\n write enable is low and read enable is low");
+//         tr.o_rddata = vif.m_mp.m_cb.o_rddata;
+//         tr.i_wren = 'b0;
+//         tr.i_rden = 'b0;
+//         tr.o_full = vif.m_mp.m_cb.o_full;
+//         tr.o_alm_full = vif.m_mp.m_cb.o_alm_full;
+//         tr.o_empty = vif.m_mp.m_cb.o_empty;
+//         tr.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
+//         item_got_port.write(tr);
+//     end
+   
     
