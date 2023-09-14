@@ -1,37 +1,74 @@
-// Code your design here
-module SYN_FIFO(clk, rstn, i_wrdata, i_wren, i_rden, o_full, o_alm_full, o_alm_empty, o_empty, o_rddata);
-  parameter ADDRESS = 10, DATA_W = 128, DEPTH = 1024, UPP_TH = 4, LOW_TH = 2;
-  
-  input clk, rstn, i_wren, i_rden;
-  input [DATA_W-1:0] i_wrdata;
-  output reg o_full, o_alm_full, o_alm_empty, o_empty;
-  output reg [DATA_W-1:0] o_rddata;
-  
-  reg [ADDRESS-1:0] wr_ptr, rd_ptr;
-  reg [DATA_W-1:0] memory [DEPTH-1:0];
-  reg [ADDRESS-1:0] cur_ptr;
- 
-  assign o_full = (cur_ptr == 'b1111111111);
-  assign o_empty = (cur_ptr =='b0000000000);
-  
-  always@(posedge clk)begin
-    if(rstn == 0)begin
-      wr_ptr <= 'b0;
-      rd_ptr <= 'b0;
-      o_rddata <= 'b0;
-      foreach (memory[i,j])
-        memory[i][j] <= 'b0;
-    end
-    else begin
-      if(i_wren == 1 && o_full != 1)begin
-        memory[wr_ptr] <= i_wrdata;
-        wr_ptr <= wr_ptr+1;
+module SYN_FIFO #(parameter DEPTH=1024, DATA_W=128, UPP_TH= 4 , LOW_TH= 2 ) (
+    input wire clk,         // Clock signal
+    input wire rstn,       // Reset signal
+    input wire i_wren,      // Write enable signal
+    input wire i_rden,      // Read enable signal
+    input wire [127:0] i_wrdata,   // Data input (128 bits)
+    output reg [127:0] o_rddata,   // Data output (128 bits)
+    output reg o_full,        // Full signal
+    output reg o_empty,    // Empty signal
+  output reg  o_alm_full,
+  output reg o_alm_empty
+);
+
+  // Depth of the FIFO
+
+  reg [127:0] fifo_mem [0:DEPTH-1];   // FIFO memory
+
+  reg [9:0] read_ptr = 0;   // Read pointer
+  reg [9:0] write_ptr = 0;  // Write pointer
+  reg [9:0] count = 0;      // Count of valid data in the FIFO
+
+  always @(posedge clk or posedge rstn ) begin
+    if (rstn == 0) begin
+      read_ptr <= 0;
+      write_ptr <= 0;
+      count <= 0;
+      o_full <= 0;
+      o_alm_full <= 0;
+      o_alm_empty <= 1;
+      o_empty <= 1;  // FIFO is empty initially
+    end else begin
+      if (i_wren && (count < DEPTH)) begin
+        fifo_mem[write_ptr] <= i_wrdata;
+        write_ptr <= write_ptr + 1;
+        count <= count + 1;
+        // FIFO is not empty when writing
       end
-      if(i_rden == 1 && o_empty!= 1)begin
-        o_rddata <= memory[rd_ptr];
-        rd_ptr <= rd_ptr + 1;
+      if (i_rden && (count > 0)) begin
+        o_rddata <= fifo_mem[read_ptr];
+        read_ptr <= read_ptr + 1;
+        count <= count - 1;
+
       end
-      cur_ptr = wr_ptr - rd_ptr;
+      if(count == 1023) begin
+        o_full <= 1; // Update full signal
+         o_empty <= 0;
+      end
+   
+        
+      else if (count ==0) begin
+         o_empty <= 1;// Update empty signal
+        o_full <= 0;
+   
+      end
+      
+      else if( count >= (DEPTH -UPP_TH-1) && count <DEPTH)
+        begin
+          o_alm_full <=1;
+        end
+      
+            else if( 0<count <= LOW_TH )
+        begin
+          o_alm_empty <=1;
+        end
+      
+//       else
+//         begin
+//            o_full <= 0; // Update full signal
+//          o_empty <= 0;
+//         end
     end
   end
+
 endmodule
