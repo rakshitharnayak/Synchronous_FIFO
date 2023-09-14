@@ -1,7 +1,9 @@
+//INTERFACE
+
 interface fifo_if(input bit clk, rstn);
     logic i_wren, i_rden, o_alm_empty, o_empty, o_alm_full, o_full;
-    logic [DATA_W - 1:0] i_wrdata;
-    logic [DATA_W - 1:0] o_rddata;
+  logic [`DATA_W - 1:0] i_wrdata;
+  logic [`DATA_W - 1:0] o_rddata;
 
     clocking d_cb @(posedge clk);
     default input #0 output #0;
@@ -23,6 +25,3 @@ interface fifo_if(input bit clk, rstn);
   modport m_mp (clocking m_cb);
       
 endinterface 
-
-
-
