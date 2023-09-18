@@ -28,7 +28,8 @@ class fifo_driver extends uvm_driver#(fifo_seq_item);
         if(tr.i_wren == 1)begin
           main_write(tr.i_wrdata);
         end
-        else if(tr.i_rden == 1)begin
+//         else
+          if(tr.i_rden == 1)begin
           main_read();
         end
         seq_item_port.item_done();
@@ -39,6 +40,8 @@ class fifo_driver extends uvm_driver#(fifo_seq_item);
       @(posedge vif.d_mp.d_cb)
       vif.d_mp.d_cb.i_wren <= 'b1;
       vif.d_mp.d_cb.i_wrdata <= din;
+//     $display("time = %0t, driver -> writedata = %0h",$time,din);
+//     $display("time = %0t, driver -> vif.d_mp.d_cb.i_wrdata = %0h",$time,vif.d_mp.d_cb.i_wrdata);
       @(posedge vif.d_mp.d_cb)
       vif.d_mp.d_cb.i_wren <= 'b0;
   endtask
