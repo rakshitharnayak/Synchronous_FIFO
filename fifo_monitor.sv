@@ -84,7 +84,7 @@
       	item_got_port.write(trans);
       end
        if( vif.m_mp.m_cb.i_rden == 1)begin
-        @(posedge vif.m_mp.m_cb)
+//        @(posedge vif.m_mp.m_cb)
          $display("\n time = %0t, write enable is low and read enable is high", $time);
         trans.o_rddata = vif.m_mp.m_cb.o_rddata;
         trans.i_wren = 'b0;
