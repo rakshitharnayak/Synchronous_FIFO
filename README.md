@@ -14,3 +14,7 @@
  
 //////////////////////////////////////////////////////////////////////////
 
+
+Here is the [EDA link](https://www.edaplayground.com/x/Tc6H) and execute it in order to get better understanding
+
+
