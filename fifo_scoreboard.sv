@@ -26,10 +26,10 @@ class fifo_scoreboard extends uvm_scoreboard;
       queue.push_back(tr.i_wrdata);
       counter++;
 //       $display(" scoreboard: queue: %0p",queue);
-      `uvm_info("SCOREBOARD: write Data", $sformatf("wr: %0b, rd: %0b, data_in: %0h, almost_full = %0b, full: %0b, ",tr.i_wren, tr.i_rden, tr.i_wrdata, tr.o_alm_full, tr.o_full), UVM_LOW);
+      `uvm_info("SCOREBOARD: write Data", $sformatf("wr: %0b, rd: %0b, data_in: %0h, almost_full = %0b, full: %0b, counter = %0d ",tr.i_wren, tr.i_rden, tr.i_wrdata, tr.o_alm_full, tr.o_full,counter), UVM_LOW);
       
       //check o_alm_full 
-      
+      //1019,1020,1021,1022,1023
       if(queue.size() >= (`DEPTH -`UPP_TH-1) && queue.size() < `DEPTH)
         begin
           $display("counter = %0d", counter);
@@ -39,6 +39,7 @@ class fifo_scoreboard extends uvm_scoreboard;
         end
       
           //check o_full 
+      //1024
       if(queue.size() == `DEPTH)
         begin
           $display("counter = %0d", counter);
@@ -53,10 +54,10 @@ class fifo_scoreboard extends uvm_scoreboard;
       if(queue.size() >= 'd1)begin
         examdata = queue.pop_front();
         counter--;
-        `uvm_info("SCOREBOARD: Read Data", $sformatf("wr: %0b, rd: %0b, examdata: %0h, data_out: %0h, almost_empty = %0b, empty: %0b",tr.i_wren, tr.i_rden, examdata, tr.o_rddata, tr.o_alm_empty, tr.o_empty), UVM_LOW);
+        `uvm_info("SCOREBOARD: Read Data", $sformatf("wr: %0b, rd: %0b, examdata: %0h, data_out: %0h, almost_empty = %0b, empty: %0b , counter = %0d",tr.i_wren, tr.i_rden, examdata, tr.o_rddata, tr.o_alm_empty, tr.o_empty,counter), UVM_LOW);
         
          //check o_alm_empty 
-      
+      //1,2
         if(queue.size() > 0 && queue.size() <= `LOW_TH)
         begin
           $display("counter = %0d", counter);
