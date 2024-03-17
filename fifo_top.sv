@@ -10,6 +10,7 @@
 `include "fifo_driver.sv"
 `include "fifo_monitor.sv"
 `include "fifo_agent.sv"
+`include "fifo_coverage.sv"
 `include "fifo_scoreboard.sv"
 `include "fifo_environment.sv"
 `include "fifo_test.sv"
@@ -29,7 +30,7 @@ module tb;
   
   fifo_if fif(clk, rstn);
   
-  SYN_FIFO dut(.clk(fif.clk),
+  my_fifo dut(.clk(fif.clk),
                .rstn(fif.rstn),
                .i_wrdata(fif.i_wrdata),
                .i_wren(fif.i_wren),
