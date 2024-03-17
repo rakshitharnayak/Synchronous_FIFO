@@ -36,7 +36,7 @@ class fifo_sequence extends uvm_sequence#(fifo_seq_item);
 //           finish_item(req);
 //         end
       
-      //        `uvm_info(get_type_name(), $sformatf("******** Generate 1024 WRITE AND READ IN ALTERNATE REQs ********"), UVM_LOW)
+//              `uvm_info(get_type_name(), $sformatf("******** Generate 1024 WRITE AND READ IN ALTERNATE REQs ********"), UVM_LOW)
 //       repeat(`DEPTH) begin
 //           req = fifo_seq_item::type_id::create("req");
 //           start_item(req);
