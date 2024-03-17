@@ -1,5 +1,3 @@
-# Synchronous_FIFO
-
  A synchronous FIFO refers to a FIFO design where data values are written sequentially into a memory array using a clock signal, and the data values are sequentially read out from the memory array using the same clock signal
 
  # BLOCK DIAGRAM
