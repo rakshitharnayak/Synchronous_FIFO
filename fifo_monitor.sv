@@ -5,6 +5,9 @@
   uvm_analysis_port#(fifo_seq_item) item_got_port;
   `uvm_component_utils(fifo_monitor)
   
+   //------------------------ analysis port -------------------------------------
+//    uvm_analysis_port#(fifo_seq_item) ap_mon;
+   
   function new(string name = "fifo_monitor", uvm_component parent);
     super.new(name, parent);
     item_got_port = new("item_got_port", this);
@@ -16,6 +19,7 @@
     trans = fifo_seq_item::type_id::create("trans");
     if(!uvm_config_db#(virtual fifo_if)::get(this, "", "vif", vif))
       `uvm_fatal("Monitor: ", "No vif is found!")
+//     ap_mon=new("ap_mon",this);
   endfunction
       
   virtual task run_phase(uvm_phase phase);
@@ -82,9 +86,10 @@
         trans.o_full = vif.m_mp.m_cb.o_full;
         trans.o_alm_full = vif.m_mp.m_cb.o_alm_full;
       	item_got_port.write(trans);
+//       item_got_port.write(trans);
       end
        if( vif.m_mp.m_cb.i_rden == 1)begin
-//        @(posedge vif.m_mp.m_cb)
+//         @(posedge vif.m_mp.m_cb)
          $display("\n time = %0t, write enable is low and read enable is high", $time);
         trans.o_rddata = vif.m_mp.m_cb.o_rddata;
         trans.i_wren = 'b0;
@@ -93,6 +98,7 @@
         trans.o_empty = vif.m_mp.m_cb.o_empty;
         trans.o_alm_empty = vif.m_mp.m_cb.o_alm_empty;
         item_got_port.write(trans);
+//          item_got_port.write(trans);
       end
       
     end
