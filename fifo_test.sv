@@ -1,4 +1,6 @@
  //TEST
+// `include "defines.sv"
+
 class fifo_test extends uvm_test;
   fifo_sequence seq;
   fifo_environment env;
